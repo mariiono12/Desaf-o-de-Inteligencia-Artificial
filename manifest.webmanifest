@@ -1,0 +1,19 @@
+{
+  "name": "Eco Estelar — La galaxia te necesita",
+  "short_name": "Eco Estelar",
+  "description": "Un arcade espacial de memoria, música y reflejos.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#080a14",
+  "theme_color": "#080a14",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

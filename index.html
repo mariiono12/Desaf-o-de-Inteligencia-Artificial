@@ -1,142 +1,171 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#090910">
-    <meta name="description" content="Busca canciones y artistas, calibra el tempo y juega un ritmo arcade de cuatro carriles en Ritmo.">
-    <title>Ritmo — encuentra tu pulso</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080a14">
+  <meta name="description" content="Recupera la canción de la galaxia en Eco Estelar, un arcade de memoria con tres modos, desafíos y récords.">
+  <meta property="og:title" content="Eco Estelar — La galaxia te necesita">
+  <meta property="og:description" content="Escucha las señales, memoriza la secuencia y devuelve la luz a las estrellas.">
+  <meta property="og:type" content="website">
+  <title>Eco Estelar — La galaxia te necesita</title>
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./script.js" defer></script>
 </head>
 <body>
-    <div class="app-shell">
-        <aside class="sidebar">
-            <a class="brand" href="#" aria-label="Ritmo, inicio"><span class="brand-mark">♪</span> ritmo<span class="brand-dot">.</span></a>
-            <p class="side-label">MENÚ</p>
-            <nav class="side-nav" aria-label="Navegación principal">
-                <button class="nav-item active" data-view="discover"><span>⌕</span> Explorar</button>
-                <button class="nav-item" data-view="library"><span>▤</span> Mi biblioteca</button>
-            </nav>
-            <div class="sidebar-bottom">
-                <div class="license-note"><span class="license-icon">♪</span><div><strong>Tu música, tu ritmo</strong><small>Beats originales y audio local</small></div></div>
-                <button id="settingsOpen" class="settings-link"><span>⚙</span> Ajustes</button>
-                <div class="profile"><div class="avatar">R</div><div><strong>Jugador</strong><small>Listo para jugar</small></div><span class="profile-more">···</span></div>
-            </div>
-        </aside>
+  <div class="space-noise" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Eco Estelar, inicio">
+      <span class="brand-symbol" aria-hidden="true">✳</span>
+      <span class="brand-name">JUEGOS DE <strong>OTRO MUNDO</strong></span>
+    </a>
+    <div class="system-status"><span class="live-dot"></span><span>SISTEMA EN LÍNEA</span><span class="topbar-divider">/</span><span>ARCADE 01</span></div>
+  </header>
 
-        <main class="content">
-            <header class="topbar">
-                <div class="breadcrumbs">INICIO <span>/</span> <strong id="breadcrumbCurrent">EXPLORAR</strong></div>
-                <button id="topSettings" class="icon-button" aria-label="Abrir ajustes">⚙</button>
-            </header>
-
-            <section id="discoverView" class="view">
-                <section class="hero">
-                    <div class="hero-copy">
-                        <div class="eyebrow"><span class="live-dot"></span> EL RITMO LO PONES TÚ</div>
-                        <h1>Encuentra tu pulso.<br><em>Hazlo tuyo.</em></h1>
-                        <p>Busca una canción o artista y juega cada nota a tiempo en cuatro carriles.</p>
-                        <a class="hero-link" href="#trackSection">Descubrir canciones <span>↓</span></a>
-                        <button id="uploadAudioButton" class="upload-audio-button" type="button">＋ Jugar con un archivo de audio</button>
-                        <input id="localAudioInput" class="visually-hidden" type="file" accept="audio/*">
-                    </div>
-                    <div class="hero-art" aria-hidden="true">
-                        <div class="art-glow"></div><div class="art-ring ring-one"></div><div class="art-ring ring-two"></div>
-                        <div class="art-disc"><span>♪</span></div>
-                        <div class="sound-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-                        <div class="art-caption">ORIGINAL<br>BEATS ONLY</div>
-                    </div>
-                    <div class="hero-index">01 <span>—</span> 04</div>
-                </section>
-
-                <section id="trackSection" class="catalog">
-                    <div class="catalog-heading">
-                        <div><div class="eyebrow muted-eyebrow">DESCUBRE TU PRÓXIMO BEAT</div><h2 id="catalogTitle">Busca una canción o artista</h2></div>
-                        <div class="search-wrap"><span>⌕</span><input id="searchInput" type="search" placeholder="Busca una canción o artista..." autocomplete="off"><kbd>/</kbd></div>
-                    </div>
-                        <div id="searchStatus" class="search-status" role="status" aria-live="polite">Configura una API key para ver resultados de YouTube aquí, o busca directamente en YouTube.</div>
-                        <div id="searchActions" class="search-actions" hidden>
-                            <a id="directYoutubeSearch" class="search-fallback-link" href="#" target="_blank" rel="noopener noreferrer">Buscar en YouTube ↗</a>
-                            <button id="configureYoutubeSearch" class="search-settings-link" type="button">Configurar búsqueda dentro del juego</button>
-                        </div>
-                    <div class="filter-row">
-                        <div class="filters" role="group" aria-label="Filtrar por género">
-                            <button class="filter-chip selected" data-filter="Todos">Todos los beats</button>
-                            <button class="filter-chip" data-filter="Electrónica">Electrónica</button>
-                            <button class="filter-chip" data-filter="Chill">Chill</button>
-                            <button class="filter-chip" data-filter="Arcade">Arcade</button>
-                        </div>
-                        <div class="free-label"><span>♪</span> YouTube · beats originales · audio local</div>
-                    </div>
-                    <div id="trackGrid" class="track-grid"></div>
-                    <div id="emptyState" class="empty-state" hidden><span>⌕</span><h3>No encontramos esa canción</h3><p>Prueba otro título o carga un archivo de audio si YouTube no permite reproducir el video aquí.</p></div>
-                    <footer class="catalog-footer"><span>MÚSICA PARA JUGAR</span><span>YouTube puede bloquear algunos videos. Para esos casos, carga un audio local.</span></footer>
-                </section>
-            </section>
-
-            <section id="libraryView" class="view library-view" hidden>
-                <div class="library-heading"><div class="eyebrow muted-eyebrow">TUS FAVORITOS</div><h1>Mi biblioteca</h1><p>Guarda tus beats favoritos y vuelve a jugar cuando quieras.</p></div>
-                <div id="libraryGrid" class="track-grid"></div>
-                <div id="libraryEmpty" class="empty-state"><span>♡</span><h3>Tu biblioteca está esperando</h3><p>Marca un beat con ♡ para tenerlo siempre a mano.</p><button class="primary-button" id="browseButton">Explorar beats</button></div>
-            </section>
-        </main>
-    </div>
-
-    <section id="gameScreen" class="game-screen" hidden aria-label="Partida de ritmo">
-        <div id="gameBackdrop" class="game-backdrop" aria-hidden="true"></div>
-        <header class="game-topbar">
-            <button id="exitGame" class="text-button"><span>←</span> Salir</button>
-            <div class="playing-track"><div id="gameCover" class="mini-cover"></div><div><strong id="gameTitle">—</strong><small id="gameArtist">—</small></div></div>
-            <button id="gameSettings" class="icon-button" aria-label="Ajustes de partida">⚙</button>
-            <button id="pauseGame" class="icon-button" aria-label="Pausar partida">Ⅱ</button>
-        </header>
-        <div class="game-layout">
-            <div class="game-main">
-                <div class="game-meta"><span class="game-live"><i class="live-dot"></i> <span id="gameStateLabel">LISTO PARA JUGAR</span></span><span id="measureLabel" class="measure-label">COMPÁS 01 · BEAT 1</span><span id="gameBpm">120 BPM</span></div>
-                <div class="game-stage">
-                    <div class="stage-glow"></div>
-                    <div class="lane-labels" aria-hidden="true"><span>D</span><span>F</span><span>J</span><span>K</span></div>
-                    <canvas id="rhythmCanvas" width="800" height="600" aria-label="Cuatro carriles verticales. Pulsa D, F, J o K cuando la nota llegue a la línea inferior."></canvas>
-                    <div id="hitRating" class="hit-rating" aria-live="polite"></div>
-                    <div id="startOverlay" class="start-overlay"><div class="start-icon">✦</div><span class="setup-kicker">MODO 4 CARRILES · D F J K</span><h2>Escucha. Apunta. Golpea.</h2><p id="setupDescription">Las notas bajan por cuatro carriles. Sincroniza el tempo para empezar.</p><button id="previewTrack" class="preview-track-button" type="button" hidden>▶ Escuchar para calibrar</button><label class="tempo-control" for="bpmSetting">TEMPO <strong id="bpmValue">120 BPM</strong><input id="bpmSetting" type="range" min="60" max="200" value="120"></label><button id="tapTempo" class="tap-tempo-button" type="button">MARCAR TEMPO <span>· 0/4</span></button><small id="tapTempoHint" class="tempo-hint">Marca cuatro pulsos de la canción para sincronizar las notas.</small><label class="tempo-control phase-control" for="beatOffsetSetting">CALIBRACIÓN <strong id="beatOffsetValue">0 ms</strong><input id="beatOffsetSetting" type="range" min="-5000" max="5000" step="25" value="0"><small>Ajusta si las notas llegan antes o después del sonido.</small></label><small id="syncStatus" class="sync-status" role="status" hidden></small><button id="startGame" class="primary-button start-game-button">Empezar partida <span>→</span></button><button id="chooseAnotherVideo" class="choose-another-video" type="button" hidden>← Elegir otra canción</button><button id="uploadFallback" class="upload-fallback" type="button" hidden>Usar un archivo de audio</button></div>
-                    <div id="pauseOverlay" class="pause-overlay" hidden><div class="start-icon">Ⅱ</div><h2>Partida en pausa</h2><button id="resumeGame" class="primary-button">Seguir jugando <span>→</span></button></div>
-                </div>
-                <div class="game-controls"><span><b>D F J K</b> · de izquierda a derecha</span><span>ESPACIO para pausar</span><div class="progress-track"><div id="progressBar"></div></div><span id="timeLabel">0:00</span></div>
-            </div>
-            <aside class="score-panel">
-                <section class="youtube-player-card">
-                    <div class="youtube-player-heading"><span id="playerHeading">TU CANCIÓN</span><a id="openYoutubeVideo" href="#" target="_blank" rel="noopener noreferrer" hidden>Ver en YouTube ↗</a></div>
-                    <div id="youtube-player-container"><div id="youtube-player"></div></div>
-                    <p id="youtubePlayerStatus">El video aparecerá aquí al elegir una canción.</p>
-                </section>
-                <div class="eyebrow muted-eyebrow">TU RENDIMIENTO</div>
-                <div class="score-block"><span>PUNTUACIÓN</span><strong id="scoreText">000000</strong></div>
-                <div class="score-stats"><div><span>COMBO</span><strong><b id="comboText">0</b> <small>x</small></strong></div><div><span>PRECISIÓN</span><strong id="accText">100<small>%</small></strong></div></div>
-                <div class="best-score"><span>RÉCORD PERSONAL</span><strong id="bestText">000000</strong></div>
-                <div class="rank-card"><div class="rank-star">✦</div><div><strong id="rankText">¡A romperla!</strong><p id="rankDescription">Cada nota cuenta. Encuentra tu ritmo.</p></div></div>
-                <button id="retryGame" class="secondary-button">↻ <span>Reintentar</span></button>
-            </aside>
-        </div>
-        <div id="resultModal" class="modal-backdrop" hidden><div class="result-card"><button id="closeResult" class="modal-close" aria-label="Cerrar">×</button><div class="result-icon">✦</div><div class="eyebrow muted-eyebrow">BEAT COMPLETADO</div><h2>¡Buen ritmo!</h2><p id="resultTrack">—</p><div class="result-score"><span>PUNTUACIÓN</span><strong id="resultScore">0</strong></div><div id="resultRank" class="result-rank">PERFECT</div><button id="playAgain" class="primary-button">Jugar otra vez <span>→</span></button></div></div>
+  <main class="page-shell">
+    <section class="hero" aria-labelledby="game-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-rule"></span> ARCHIVO DE EXPLORACIÓN <span class="eyebrow-index">N.º 001</span></p>
+        <h1 id="game-title">Eco <span>Estelar</span><span class="title-star" aria-hidden="true">✦</span></h1>
+        <p class="hero-description">Una galaxia sin memoria. Cuatro señales perdidas. <strong>Tu misión: devolverles la canción.</strong></p>
+      </div>
+      <button id="sound-toggle" class="sound-toggle" type="button" aria-pressed="false" aria-label="Activar sonido">
+        <span class="sound-icon" aria-hidden="true">♫</span><span id="sound-label">SONIDO OFF</span>
+      </button>
     </section>
 
-    <div id="settingsModal" class="modal-backdrop" hidden>
-        <section class="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
-            <div class="modal-heading"><div><div class="eyebrow muted-eyebrow">A TU MANERA</div><h2 id="settingsTitle">Ajustes</h2></div><button id="settingsClose" class="modal-close" aria-label="Cerrar ajustes">×</button></div>
-            <div class="setting-row"><div><strong>Volumen de música</strong><small>Ajusta el volumen de los beats</small></div><div class="setting-control"><input id="volumeSetting" type="range" min="0" max="100" value="65"><span id="volumeValue">65%</span></div></div>
-            <div class="setting-row"><div><strong>Velocidad de notas</strong><small>Elige el reto que más te guste</small></div><select id="speedSetting"><option value="1">Normal</option><option value="1.25">Rápida</option><option value="1.5">Experta</option></select></div>
-            <div class="setting-row"><div><strong>Fondo de partida</strong><small>Usa un escenario limpio, la portada o el video de YouTube cuando esté disponible.</small></div><select id="backgroundSetting"><option value="clean">Escenario limpio</option><option value="cover">Portada ambiental</option><option value="video">Video de YouTube</option></select></div>
-            <div class="setting-row"><div><strong>Desfase de audio</strong><small>Sincroniza el ritmo con tu dispositivo</small></div><div class="setting-control"><input id="offsetSetting" type="range" min="-150" max="150" value="0" step="10"><span id="offsetValue">0 ms</span></div></div>
-            <div class="setting-row auto-sync-row"><div><label for="autoSyncSetting"><strong>Sincronizador automático</strong><small>Analiza audios locales para estimar BPM y primer pulso. En YouTube, usa Marcar tempo.</small></label></div><label class="switch-control" for="autoSyncSetting"><input id="autoSyncSetting" type="checkbox"><span class="switch-track"></span></label></div>
-            <div class="customization-heading"><span class="eyebrow muted-eyebrow">HAZLO TUYO</span><p>Personaliza las notas de la pista. Los cambios se aplican al instante.</p></div>
-            <div class="setting-row customization-row"><div><label for="noteSkinSetting"><strong>Skin de color</strong><small>Paletas originales para los cuatro carriles</small></label><div id="noteSkinPreview" class="note-skin-preview" aria-hidden="true"><i></i><i></i><i></i><i></i></div></div><select id="noteSkinSetting"><option value="prism">Prisma arcade</option><option value="aurora">Aurora</option><option value="sunset">Atardecer</option><option value="toxic">Voltaje</option></select></div>
-            <div class="setting-row customization-row"><div><label for="noteShapeSetting"><strong>Forma de nota</strong><small>Cambia la silueta que cae por la pista</small></label></div><select id="noteShapeSetting"><option value="pill">Cápsula</option><option value="diamond">Diamante</option><option value="circle">Círculo</option><option value="bar">Barra</option></select></div>
-            <div class="setting-row customization-row"><div><label for="noteSizeSetting"><strong>Tamaño de nota</strong><small>Hazlas más compactas o fáciles de leer</small></label></div><div class="setting-control"><input id="noteSizeSetting" type="range" min="70" max="140" step="5" value="100"><span id="noteSizeValue">100%</span></div></div>
-            <div class="api-key-setting"><label for="youtubeApiKey"><strong>YouTube Data API key</strong><small>Se guarda en este navegador para que la búsqueda siga disponible.</small></label><input id="youtubeApiKey" type="password" placeholder="Pega aquí tu API key" autocomplete="off" spellcheck="false"><p>Activa <b>YouTube Data API v3</b> en Google Cloud. La clave se guarda localmente y viaja en las solicitudes del navegador: restríngela por HTTP referrer y limita su uso a YouTube Data API v3. En Windows, inicia el juego con <b>Iniciar Ritmo.bat</b> y permite <code>http://localhost:8000/*</code> en las restricciones HTTP referrer; abrir index.html directamente no sirve para la API. Algunos videos pueden bloquear la reproducción integrada.</p><a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Abrir credenciales de Google Cloud ↗</a></div>
-            <div class="key-hint"><span>CONTROLES</span><div><kbd>D</kbd><kbd>F</kbd><kbd>J</kbd><kbd>K</kbd><small>Carriles 1 · 2 · 3 · 4</small></div></div>
-            <button id="settingsDone" class="primary-button full-button">Guardar ajustes <span>✓</span></button>
+    <section class="dashboard" aria-label="Consola del juego Eco Estelar">
+      <div class="main-column">
+        <section class="game-card" aria-label="Partida">
+          <div class="game-card-header">
+            <div class="mission-chip"><span aria-hidden="true">◈</span> MISIÓN DE RESONANCIA</div>
+            <div class="header-actions">
+              <span id="mode-badge" class="mode-badge">CLÁSICO</span>
+              <button id="restart-button" class="icon-button" type="button" aria-label="Reiniciar partida" title="Reiniciar partida (R)">↻</button>
+            </div>
+          </div>
+
+          <div class="stats-row" aria-label="Estadísticas de la partida">
+            <div class="stat score-stat"><span class="stat-label">PUNTUACIÓN</span><strong id="score-value" class="stat-value">00000</strong></div>
+            <div class="stat-separator" aria-hidden="true"></div>
+            <div class="stat"><span class="stat-label">MEJOR RÉCORD</span><strong id="best-value" class="stat-value stat-value-muted">00000</strong></div>
+            <div class="stat"><span id="energy-label" class="stat-label">ENERGÍA</span><strong id="lives-value" class="energy-value" aria-label="3 energías">✦ ✦ ✦</strong></div>
+            <div class="stat timer-stat" id="timer-stat" hidden><span class="stat-label">TIEMPO</span><strong id="timer-value" class="timer-value">60</strong></div>
+          </div>
+
+          <div class="round-progress" aria-label="Progreso de la ronda">
+            <div class="round-progress-top"><span id="round-label" class="round-label">PREPARADA PARA DESPEGAR</span><span id="sequence-count" class="sequence-count">SECUENCIA —</span></div>
+            <div id="progress-track" class="progress-track" role="progressbar" aria-label="Señales repetidas" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0">
+              <span id="progress-fill" class="progress-fill"></span>
+            </div>
+          </div>
+
+          <div class="playfield" id="playfield">
+            <div class="orbit orbit-one" aria-hidden="true"></div>
+            <div class="orbit orbit-two" aria-hidden="true"></div>
+            <div class="orbit orbit-three" aria-hidden="true"></div>
+            <span class="spark spark-a" aria-hidden="true">✦</span>
+            <span class="spark spark-b" aria-hidden="true">✧</span>
+            <span class="spark spark-c" aria-hidden="true">·</span>
+            <div class="signal-grid" role="group" aria-label="Panel de cuatro señales; repite la secuencia en orden">
+              <button class="signal signal-aurora" data-signal="0" type="button" aria-label="Aurora, tecla Q" aria-keyshortcuts="Q">
+                <span class="signal-glyph" aria-hidden="true">✳</span><span class="signal-name">AURORA</span><span class="signal-hint">Q</span>
+              </button>
+              <button class="signal signal-pulsar" data-signal="1" type="button" aria-label="Púlsar, tecla W" aria-keyshortcuts="W">
+                <span class="signal-glyph" aria-hidden="true">✦</span><span class="signal-name">PÚLSAR</span><span class="signal-hint">W</span>
+              </button>
+              <button class="signal signal-nebula" data-signal="2" type="button" aria-label="Nebulosa, tecla A" aria-keyshortcuts="A">
+                <span class="signal-glyph" aria-hidden="true">✺</span><span class="signal-name">NEBULOSA</span><span class="signal-hint">A</span>
+              </button>
+              <button class="signal signal-comet" data-signal="3" type="button" aria-label="Cometa, tecla S" aria-keyshortcuts="S">
+                <span class="signal-glyph" aria-hidden="true">☄</span><span class="signal-name">COMETA</span><span class="signal-hint">S</span>
+              </button>
+            </div>
+            <div class="core-orb" aria-hidden="true"><span>✦</span></div>
+            <div id="start-overlay" class="start-overlay">
+              <div class="overlay-emblem" aria-hidden="true"><span>✳</span></div>
+              <p class="overlay-kicker">CANAL DE LA NAVE · ESTABLE</p>
+              <h2 id="overlay-title">La galaxia <span>te llama.</span></h2>
+              <p id="overlay-description">Afina tu memoria. Cada señal que repitas hará brillar una estrella.</p>
+              <button id="start-button" class="primary-button" type="button"><span id="start-button-label">INICIAR MISIÓN</span><span aria-hidden="true">↗</span></button>
+              <p class="overlay-shortcut">O PULSA <kbd>ENTER</kbd> PARA DESPEGAR</p>
+            </div>
+          </div>
+
+          <div class="game-bottom">
+            <div class="status-wrap"><span id="status-indicator" class="status-indicator"></span><p id="game-status" aria-live="polite">Elige un modo y pulsa iniciar misión.</p></div>
+            <div class="bottom-actions">
+              <button id="echo-button" class="secondary-button" type="button" disabled><span aria-hidden="true">◉</span> <span id="echo-label">ECO</span></button>
+              <button id="pause-button" class="secondary-button pause-button" type="button" disabled><span aria-hidden="true">Ⅱ</span> PAUSAR</button>
+            </div>
+          </div>
         </section>
-    </div>
-    <script src="script.js"></script>
+
+        <section class="mode-section" aria-labelledby="mode-title">
+          <div class="section-heading">
+            <div><p class="section-kicker">ELIGE TU RUTA</p><h2 id="mode-title">Tres formas de explorar</h2></div>
+            <span class="section-step">01 <span>/</span> 02</span>
+          </div>
+          <div class="mode-grid" role="group" aria-label="Selecciona el modo de juego">
+            <button class="mode-card is-selected" type="button" data-mode="classic" aria-pressed="true">
+              <span class="mode-icon classic-icon" aria-hidden="true">✦</span>
+              <span class="mode-card-copy"><strong>CLÁSICO</strong><small>3 energías · A tu ritmo</small></span><span class="mode-check" aria-hidden="true">✓</span>
+            </button>
+            <button class="mode-card" type="button" data-mode="sprint" aria-pressed="false">
+              <span class="mode-icon sprint-icon" aria-hidden="true">⌁</span>
+              <span class="mode-card-copy"><strong>SUPERNOVA</strong><small>60 segundos · ¡A toda luz!</small></span><span class="mode-check" aria-hidden="true">✓</span>
+            </button>
+            <button class="mode-card" type="button" data-mode="zen" aria-pressed="false">
+              <span class="mode-icon zen-icon" aria-hidden="true">☾</span>
+              <span class="mode-card-copy"><strong>ÓRBITA ZEN</strong><small>Sin presión · Vuelve a probar</small></span><span class="mode-check" aria-hidden="true">✓</span>
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <aside class="side-column" aria-label="Información y progreso">
+        <section class="side-card objective-card">
+          <div class="side-heading"><span class="side-heading-icon">◎</span><span>INFORME DE MISIÓN</span><span class="side-index">01</span></div>
+          <p id="mode-description" class="objective-copy">Observa la secuencia de luces y repítela en el mismo orden. Cada ronda suma una señal. Un error cuesta una energía.</p>
+          <div class="mission-facts"><span>SEÑALES</span><strong>4 FRECUENCIAS</strong></div>
+          <div class="mission-facts"><span>CONTROLES</span><strong>Q · W · A · S</strong></div>
+        </section>
+
+        <section class="side-card records-card">
+          <div class="side-heading"><span class="side-heading-icon">⌑</span><span>BITÁCORA PERSONAL</span><span class="side-index">02</span></div>
+          <div class="record-row"><span>PARTIDAS JUGADAS</span><strong id="games-value">0</strong></div>
+          <div class="record-row"><span>MEJOR RACHA</span><strong id="streak-record-value">0 <small>×</small></strong></div>
+          <div class="record-row"><span>RÉCORD SUPERNOVA</span><strong id="sprint-best-value">00000</strong></div>
+        </section>
+
+        <section class="side-card controls-card">
+          <div class="side-heading"><span class="side-heading-icon">⌘</span><span>CONTROLES DE VUELO</span><span class="side-index">03</span></div>
+          <div class="control-line"><span>ELEGIR SEÑAL</span><span class="control-keys"><kbd>Q</kbd><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd></span></div>
+          <div class="control-line"><span>INICIAR / REINICIAR</span><kbd>ENTER</kbd></div>
+          <div class="control-line"><span>PAUSAR</span><kbd>P</kbd></div>
+          <p class="touch-note">También puedes tocar o hacer clic en las señales.</p>
+        </section>
+
+        <details class="prompt-card">
+          <summary><span class="prompt-spark" aria-hidden="true">✧</span><span>EL PROMPT DE ESTA AVENTURA</span><span class="prompt-chevron" aria-hidden="true">⌄</span></summary>
+          <div class="prompt-content">
+            <p id="prompt-text">Crea un videojuego web llamado Eco Estelar con HTML, CSS y JavaScript. Desarrolla un juego arcade de memoria espacial con cuatro señales luminosas y sonoras en secuencias crecientes. Incluye tres modos: Clásico con tres vidas; Supernova con cuenta atrás de 60 segundos y bonificación por aciertos; y Órbita Zen sin límite de vidas. Añade controles accesibles por teclado (Q, W, A, S), clic y toque, botón para repetir la secuencia con cargas limitadas, pausa y reinicio, puntuación, racha, récords persistentes, generador de sonido, partículas, interfaz adaptable y estados claros para inicio, observación, turno, pausa y fin. Sin bibliotecas externas; prioriza accesibilidad, rendimiento y funcionamiento offline.</p>
+            <button id="copy-prompt" class="copy-button" type="button">COPIAR PROMPT <span aria-hidden="true">↗</span></button>
+          </div>
+        </details>
+
+        <div class="aside-note"><span class="note-star" aria-hidden="true">✦</span><p><strong>UN CONSEJO DE LA NAVE</strong><br>Escucha el ritmo, no solo mires las luces. Cada frecuencia tiene su propia nota.</p></div>
+      </aside>
+    </section>
+
+    <footer class="footer">
+      <span><span class="footer-mark" aria-hidden="true">✦</span> CREADO PARA EXPLORADORES DE OTRAS GALAXIAS</span>
+      <span>HECHO CON CURIOSIDAD <span class="footer-dot">·</span> HTML, CSS &amp; JS</span>
+    </footer>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
