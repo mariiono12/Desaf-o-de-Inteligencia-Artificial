@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0a0b10">
-    <title>Ritmo — juega a tu compás</title>
+    <meta name="theme-color" content="#090910">
+    <meta name="description" content="Busca canciones y artistas, calibra el tempo y juega un ritmo arcade de cuatro carriles en Ritmo.">
+    <title>Ritmo — encuentra tu pulso</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,7 +18,7 @@
                 <button class="nav-item" data-view="library"><span>▤</span> Mi biblioteca</button>
             </nav>
             <div class="sidebar-bottom">
-                <div class="license-note"><span class="license-icon">✓</span><div><strong>YouTube + originales</strong><small>Busca videos y juega al ritmo</small></div></div>
+                <div class="license-note"><span class="license-icon">♪</span><div><strong>Tu música, tu ritmo</strong><small>Beats originales y audio local</small></div></div>
                 <button id="settingsOpen" class="settings-link"><span>⚙</span> Ajustes</button>
                 <div class="profile"><div class="avatar">R</div><div><strong>Jugador</strong><small>Listo para jugar</small></div><span class="profile-more">···</span></div>
             </div>
@@ -32,10 +33,12 @@
             <section id="discoverView" class="view">
                 <section class="hero">
                     <div class="hero-copy">
-                        <div class="eyebrow"><span class="live-dot"></span> TU PRÓXIMO RÉCORD EMPIEZA AQUÍ</div>
-                        <h1>Siente el ritmo.<br><em>Juega a tu compás.</em></h1>
-                        <p>Encuentra un beat, sigue las notas y deja que la música te guíe.</p>
+                        <div class="eyebrow"><span class="live-dot"></span> EL RITMO LO PONES TÚ</div>
+                        <h1>Encuentra tu pulso.<br><em>Hazlo tuyo.</em></h1>
+                        <p>Busca una canción o artista y juega cada nota a tiempo en cuatro carriles.</p>
                         <a class="hero-link" href="#trackSection">Descubrir canciones <span>↓</span></a>
+                        <button id="uploadAudioButton" class="upload-audio-button" type="button">＋ Jugar con un archivo de audio</button>
+                        <input id="localAudioInput" class="visually-hidden" type="file" accept="audio/*">
                     </div>
                     <div class="hero-art" aria-hidden="true">
                         <div class="art-glow"></div><div class="art-ring ring-one"></div><div class="art-ring ring-two"></div>
@@ -48,10 +51,14 @@
 
                 <section id="trackSection" class="catalog">
                     <div class="catalog-heading">
-                        <div><div class="eyebrow muted-eyebrow">MÚSICA PARA JUGAR</div><h2 id="catalogTitle">Busca una canción</h2></div>
+                        <div><div class="eyebrow muted-eyebrow">DESCUBRE TU PRÓXIMO BEAT</div><h2 id="catalogTitle">Busca una canción o artista</h2></div>
                         <div class="search-wrap"><span>⌕</span><input id="searchInput" type="search" placeholder="Busca una canción o artista..." autocomplete="off"><kbd>/</kbd></div>
                     </div>
-                        <div id="searchStatus" class="search-status" role="status" aria-live="polite">Configura una API key de YouTube en Ajustes para buscar canciones y artistas.</div>
+                        <div id="searchStatus" class="search-status" role="status" aria-live="polite">Configura una API key para ver resultados de YouTube aquí, o busca directamente en YouTube.</div>
+                        <div id="searchActions" class="search-actions" hidden>
+                            <a id="directYoutubeSearch" class="search-fallback-link" href="#" target="_blank" rel="noopener noreferrer">Buscar en YouTube ↗</a>
+                            <button id="configureYoutubeSearch" class="search-settings-link" type="button">Configurar búsqueda dentro del juego</button>
+                        </div>
                     <div class="filter-row">
                         <div class="filters" role="group" aria-label="Filtrar por género">
                             <button class="filter-chip selected" data-filter="Todos">Todos los beats</button>
@@ -59,11 +66,11 @@
                             <button class="filter-chip" data-filter="Chill">Chill</button>
                             <button class="filter-chip" data-filter="Arcade">Arcade</button>
                         </div>
-                        <div class="free-label"><span>▶</span> Videos incrustados de YouTube</div>
+                        <div class="free-label"><span>♪</span> YouTube · beats originales · audio local</div>
                     </div>
                     <div id="trackGrid" class="track-grid"></div>
-                    <div id="emptyState" class="empty-state" hidden><span>⌕</span><h3>No encontramos esa canción</h3><p>Prueba otro título o revisa que el video permita reproducción incrustada.</p></div>
-                    <footer class="catalog-footer"><span>YOUTUBE + RITMO ORIGINALS</span><span>Los derechos del video pertenecen a sus titulares · BPM ajustable</span></footer>
+                    <div id="emptyState" class="empty-state" hidden><span>⌕</span><h3>No encontramos esa canción</h3><p>Prueba otro título o carga un archivo de audio si YouTube no permite reproducir el video aquí.</p></div>
+                    <footer class="catalog-footer"><span>MÚSICA PARA JUGAR</span><span>YouTube puede bloquear algunos videos. Para esos casos, carga un audio local.</span></footer>
                 </section>
             </section>
 
@@ -76,28 +83,29 @@
     </div>
 
     <section id="gameScreen" class="game-screen" hidden aria-label="Partida de ritmo">
+        <div id="gameBackdrop" class="game-backdrop" aria-hidden="true"></div>
         <header class="game-topbar">
             <button id="exitGame" class="text-button"><span>←</span> Salir</button>
             <div class="playing-track"><div id="gameCover" class="mini-cover"></div><div><strong id="gameTitle">—</strong><small id="gameArtist">—</small></div></div>
+            <button id="gameSettings" class="icon-button" aria-label="Ajustes de partida">⚙</button>
             <button id="pauseGame" class="icon-button" aria-label="Pausar partida">Ⅱ</button>
         </header>
         <div class="game-layout">
             <div class="game-main">
-                <div class="game-meta"><span><i class="live-dot"></i> EN PARTIDA</span><span id="gameBpm">120 BPM</span></div>
+                <div class="game-meta"><span class="game-live"><i class="live-dot"></i> <span id="gameStateLabel">LISTO PARA JUGAR</span></span><span id="measureLabel" class="measure-label">COMPÁS 01 · BEAT 1</span><span id="gameBpm">120 BPM</span></div>
                 <div class="game-stage">
                     <div class="stage-glow"></div>
-                    <div class="lane-labels"><span>D</span><span>F</span><span>J</span><span>K</span></div>
-                    <canvas id="rhythmCanvas" width="520" height="600" aria-label="Pista de notas"></canvas>
-                    <div class="hit-line"></div>
+                    <div class="lane-labels" aria-hidden="true"><span>D</span><span>F</span><span>J</span><span>K</span></div>
+                    <canvas id="rhythmCanvas" width="800" height="600" aria-label="Cuatro carriles verticales. Pulsa D, F, J o K cuando la nota llegue a la línea inferior."></canvas>
                     <div id="hitRating" class="hit-rating" aria-live="polite"></div>
-                    <div id="startOverlay" class="start-overlay"><div class="start-icon">▶</div><h2>¿Listo para el beat?</h2><p>Usa las teclas <b>D</b> <b>F</b> <b>J</b> <b>K</b> cuando las notas lleguen a la línea.</p><label class="tempo-control" for="bpmSetting">Tempo de la canción <strong id="bpmValue">120 BPM</strong><input id="bpmSetting" type="range" min="60" max="200" value="120"><small>Si las notas no coinciden con la música, ajusta el tempo.</small></label><button id="startGame" class="primary-button">Empezar partida <span>→</span></button></div>
+                    <div id="startOverlay" class="start-overlay"><div class="start-icon">✦</div><span class="setup-kicker">MODO 4 CARRILES · D F J K</span><h2>Escucha. Apunta. Golpea.</h2><p id="setupDescription">Las notas bajan por cuatro carriles. Sincroniza el tempo para empezar.</p><button id="previewTrack" class="preview-track-button" type="button" hidden>▶ Escuchar para calibrar</button><label class="tempo-control" for="bpmSetting">TEMPO <strong id="bpmValue">120 BPM</strong><input id="bpmSetting" type="range" min="60" max="200" value="120"></label><button id="tapTempo" class="tap-tempo-button" type="button">MARCAR TEMPO <span>· 0/4</span></button><small id="tapTempoHint" class="tempo-hint">Marca cuatro pulsos de la canción para sincronizar las notas.</small><label class="tempo-control phase-control" for="beatOffsetSetting">CALIBRACIÓN <strong id="beatOffsetValue">0 ms</strong><input id="beatOffsetSetting" type="range" min="-5000" max="5000" step="25" value="0"><small>Ajusta si las notas llegan antes o después del sonido.</small></label><small id="syncStatus" class="sync-status" role="status" hidden></small><button id="startGame" class="primary-button start-game-button">Empezar partida <span>→</span></button><button id="chooseAnotherVideo" class="choose-another-video" type="button" hidden>← Elegir otra canción</button><button id="uploadFallback" class="upload-fallback" type="button" hidden>Usar un archivo de audio</button></div>
                     <div id="pauseOverlay" class="pause-overlay" hidden><div class="start-icon">Ⅱ</div><h2>Partida en pausa</h2><button id="resumeGame" class="primary-button">Seguir jugando <span>→</span></button></div>
                 </div>
-                <div class="game-controls"><span><b>D F J K</b> para tocar</span><span>ESPACIO para pausar</span><div class="progress-track"><div id="progressBar"></div></div><span id="timeLabel">0:00</span></div>
+                <div class="game-controls"><span><b>D F J K</b> · de izquierda a derecha</span><span>ESPACIO para pausar</span><div class="progress-track"><div id="progressBar"></div></div><span id="timeLabel">0:00</span></div>
             </div>
             <aside class="score-panel">
                 <section class="youtube-player-card">
-                    <div class="youtube-player-heading"><span>REPRODUCCIÓN DE YOUTUBE</span><a id="openYoutubeVideo" href="#" target="_blank" rel="noopener noreferrer" hidden>Ver en YouTube ↗</a></div>
+                    <div class="youtube-player-heading"><span id="playerHeading">TU CANCIÓN</span><a id="openYoutubeVideo" href="#" target="_blank" rel="noopener noreferrer" hidden>Ver en YouTube ↗</a></div>
                     <div id="youtube-player-container"><div id="youtube-player"></div></div>
                     <p id="youtubePlayerStatus">El video aparecerá aquí al elegir una canción.</p>
                 </section>
@@ -117,9 +125,15 @@
             <div class="modal-heading"><div><div class="eyebrow muted-eyebrow">A TU MANERA</div><h2 id="settingsTitle">Ajustes</h2></div><button id="settingsClose" class="modal-close" aria-label="Cerrar ajustes">×</button></div>
             <div class="setting-row"><div><strong>Volumen de música</strong><small>Ajusta el volumen de los beats</small></div><div class="setting-control"><input id="volumeSetting" type="range" min="0" max="100" value="65"><span id="volumeValue">65%</span></div></div>
             <div class="setting-row"><div><strong>Velocidad de notas</strong><small>Elige el reto que más te guste</small></div><select id="speedSetting"><option value="1">Normal</option><option value="1.25">Rápida</option><option value="1.5">Experta</option></select></div>
+            <div class="setting-row"><div><strong>Fondo de partida</strong><small>Usa un escenario limpio, la portada o el video de YouTube cuando esté disponible.</small></div><select id="backgroundSetting"><option value="clean">Escenario limpio</option><option value="cover">Portada ambiental</option><option value="video">Video de YouTube</option></select></div>
             <div class="setting-row"><div><strong>Desfase de audio</strong><small>Sincroniza el ritmo con tu dispositivo</small></div><div class="setting-control"><input id="offsetSetting" type="range" min="-150" max="150" value="0" step="10"><span id="offsetValue">0 ms</span></div></div>
-            <div class="api-key-setting"><label for="youtubeApiKey"><strong>YouTube Data API key</strong><small>Se conserva solo durante esta sesión del navegador.</small></label><input id="youtubeApiKey" type="password" placeholder="Pega aquí tu API key" autocomplete="off" spellcheck="false"><p>Activa <b>YouTube Data API v3</b> en Google Cloud. La clave viaja en las solicitudes del navegador: restríngela por HTTP referrer y limita su uso a YouTube Data API v3. Abre el juego desde localhost o una web (no desde file://).</p><a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Abrir credenciales de Google Cloud ↗</a></div>
-            <div class="key-hint"><span>CONTROLES</span><div><kbd>D</kbd><kbd>F</kbd><kbd>J</kbd><kbd>K</kbd><small>Usa estas teclas para golpear las notas.</small></div></div>
+            <div class="setting-row auto-sync-row"><div><label for="autoSyncSetting"><strong>Sincronizador automático</strong><small>Analiza audios locales para estimar BPM y primer pulso. En YouTube, usa Marcar tempo.</small></label></div><label class="switch-control" for="autoSyncSetting"><input id="autoSyncSetting" type="checkbox"><span class="switch-track"></span></label></div>
+            <div class="customization-heading"><span class="eyebrow muted-eyebrow">HAZLO TUYO</span><p>Personaliza las notas de la pista. Los cambios se aplican al instante.</p></div>
+            <div class="setting-row customization-row"><div><label for="noteSkinSetting"><strong>Skin de color</strong><small>Paletas originales para los cuatro carriles</small></label><div id="noteSkinPreview" class="note-skin-preview" aria-hidden="true"><i></i><i></i><i></i><i></i></div></div><select id="noteSkinSetting"><option value="prism">Prisma arcade</option><option value="aurora">Aurora</option><option value="sunset">Atardecer</option><option value="toxic">Voltaje</option></select></div>
+            <div class="setting-row customization-row"><div><label for="noteShapeSetting"><strong>Forma de nota</strong><small>Cambia la silueta que cae por la pista</small></label></div><select id="noteShapeSetting"><option value="pill">Cápsula</option><option value="diamond">Diamante</option><option value="circle">Círculo</option><option value="bar">Barra</option></select></div>
+            <div class="setting-row customization-row"><div><label for="noteSizeSetting"><strong>Tamaño de nota</strong><small>Hazlas más compactas o fáciles de leer</small></label></div><div class="setting-control"><input id="noteSizeSetting" type="range" min="70" max="140" step="5" value="100"><span id="noteSizeValue">100%</span></div></div>
+            <div class="api-key-setting"><label for="youtubeApiKey"><strong>YouTube Data API key</strong><small>Se guarda en este navegador para que la búsqueda siga disponible.</small></label><input id="youtubeApiKey" type="password" placeholder="Pega aquí tu API key" autocomplete="off" spellcheck="false"><p>Activa <b>YouTube Data API v3</b> en Google Cloud. La clave se guarda localmente y viaja en las solicitudes del navegador: restríngela por HTTP referrer y limita su uso a YouTube Data API v3. En Windows, inicia el juego con <b>Iniciar Ritmo.bat</b> y permite <code>http://localhost:8000/*</code> en las restricciones HTTP referrer; abrir index.html directamente no sirve para la API. Algunos videos pueden bloquear la reproducción integrada.</p><a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Abrir credenciales de Google Cloud ↗</a></div>
+            <div class="key-hint"><span>CONTROLES</span><div><kbd>D</kbd><kbd>F</kbd><kbd>J</kbd><kbd>K</kbd><small>Carriles 1 · 2 · 3 · 4</small></div></div>
             <button id="settingsDone" class="primary-button full-button">Guardar ajustes <span>✓</span></button>
         </section>
     </div>
